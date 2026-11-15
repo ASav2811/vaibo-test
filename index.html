@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f8fc" />
+    <meta name="description" content="VibeHunt — короткий интерактивный тест о рабочем стиле, суперсилах и том, что тебя заряжает." />
+    <title>VibeHunt — найди свой рабочий вайб</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.mjs" type="module"></script>
+  </head>
+  <body>
+    <div class="ambient ambient--one" aria-hidden="true"></div>
+    <div class="ambient ambient--two" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="./" id="brand-link" aria-label="VibeHunt — на главную">
+          <span class="brand-symbol" aria-hidden="true">✳</span>
+          <span class="brand-word"><span>vibe</span><span>hunt</span></span>
+          <span class="brand-period" aria-hidden="true">.</span>
+        </a>
+        <div class="header-right">
+          <span class="header-tag"><span class="status-dot" aria-hidden="true"></span> Твой рабочий вайб</span>
+          <button class="icon-button help-toggle" id="help-button" aria-label="О тестировании" title="О тестировании" type="button">?</button>
+        </div>
+      </header>
+
+      <main id="app" tabindex="-1" aria-live="polite" aria-relevant="additions text"></main>
+
+      <footer class="site-footer">
+        <span>© VibeHunt</span>
+        <span>Не экзамен. Просто повод узнать себя получше ✳</span>
+      </footer>
+    </div>
+
+    <dialog id="info-dialog" class="dialog">
+      <div class="dialog-inner">
+        <button class="dialog-close icon-button" type="button" aria-label="Закрыть" data-close-dialog>×</button>
+        <div class="small-eyebrow">ПАРА СЛОВ О ТЕСТЕ</div>
+        <h2>Здесь нет правильных ответов</h2>
+        <p>Ты выбираешь то, что действительно тебе близко. По ответам мы предложим одного из 15 персонажей Вайбо и покажем твои возможные суперсилы.</p>
+        <p>Вопросы о девизе, руководителе и команде — без таймера. Потом начнутся 23 коротких задания и отсчёт пяти минут.</p>
+        <div class="dialog-callout">Это игровой профиль рабочих предпочтений, а не проверка способностей или оценка пригодности к работе.</div>
+        <button class="button button--purple button--wide" type="button" data-close-dialog>Понятно!</button>
+      </div>
+    </dialog>
+
+    <dialog id="next-dialog" class="dialog">
+      <div class="dialog-inner">
+        <button class="dialog-close icon-button" type="button" aria-label="Закрыть" data-close-dialog>×</button>
+        <div class="small-eyebrow">ПРОДОЛЖЕНИЕ СЛЕДУЕТ</div>
+        <h2>Это только начало твоей истории</h2>
+        <p>В полной версии VibeHunt будет большое тестирование: подробный профиль, больше суперсил и личный маршрут карьерного развития.</p>
+        <div class="dialog-callout">Пока доступно короткое знакомство с Вайбо. Полная версия с личным планом развития появится позже.</div>
+        <button class="button button--purple button--wide" type="button" data-close-dialog>Вернуться к моему Вайбо</button>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>

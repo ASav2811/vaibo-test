@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f8fc" />
+    <meta name="description" content="VibeHunt — короткий интерактивный тест о рабочем стиле, суперсилах и том, что тебя заряжает." />
+    <title>VibeHunt — найди свой рабочий вайб</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <style>
+:root {
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Arial', sans-serif;
+  color: #202035;
+  background: #f7f8fc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #202035;
+  --muted: #74788f;
+  --violet: #6752de;
+  --violet-deep: #4f3ab9;
+  --orange: #ff6b32;
+  --border: #e8e8f0;
+  --shadow: 0 22px 70px rgba(35, 30, 78, .075);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { min-height: 100%; }
+body { min-height: 100vh; margin: 0; overflow-x: hidden; }
+button, textarea, input { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+button:focus-visible, a:focus-visible, textarea:focus-visible, input:focus-visible {
+  outline: 3px solid #ab9aff; outline-offset: 3px;
+}
+::selection { background: #d9d1ff; color: #30266b; }
+
+.ambient { position: fixed; z-index: -1; border-radius: 50%; pointer-events: none; filter: blur(28px); }
+.ambient--one { width: 480px; height: 480px; top: -300px; right: -130px; background: #e8e3ff; opacity: .7; }
+.ambient--two { width: 470px; height: 470px; left: -360px; bottom: -90px; background: #ffe8dc; opacity: .64; }
+.app-shell { width: min(1160px, calc(100% - 56px)); min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; }
+.site-header { min-height: 105px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: inline-flex; align-items: center; text-decoration: none; gap: 3px; font-weight: 800; font-size: 28px; letter-spacing: -1.9px; }
+.brand-word span:first-child { color: #6b54e8; }
+.brand-word span:last-child { color: #ff743b; }
+.brand-symbol { display: inline-grid; place-items: center; width: 31px; height: 31px; color: #6752de; margin-right: 5px; font-size: 29px; transform: rotate(-8deg); }
+.brand-period { color: #ff743b; align-self: flex-end; margin-left: -3px; }
+.header-right { display: flex; align-items: center; gap: 18px; }
+.header-tag { background: #fff; color: #5c6072; border: 1px solid var(--border); border-radius: 99px; padding: 10px 15px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.status-dot { display: inline-block; width: 7px; height: 7px; background: #59caab; border-radius: 50%; margin-right: 6px; box-shadow: 0 0 0 4px #e3f8f0; }
+.icon-button { border: 1px solid #e7e7ef; border-radius: 50%; width: 36px; height: 36px; display: inline-grid; place-items: center; background: white; color: #66647c; font-size: 17px; font-weight: 800; transition: background .2s, transform .2s; }
+.icon-button:hover { background: #eeebff; transform: translateY(-1px); }
+main { flex: 1; display: flex; flex-direction: column; outline: 0; }
+.site-footer { min-height: 82px; display: flex; justify-content: space-between; gap: 20px; align-items: center; color: #a2a4b5; font-size: 11px; font-weight: 600; }
+
+.eyebrow, .small-eyebrow { letter-spacing: .11em; font-size: 11px; font-weight: 800; color: #6c56e0; text-transform: uppercase; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px; border-radius: 99px; background: #ebe7ff; width: max-content; letter-spacing: .07em; }
+.eyebrow .mini-spark { color: #ff8b53; font-size: 16px; line-height: 10px; }
+h1, h2, h3, p { margin-top: 0; }
+.display { font-weight: 800; line-height: 1.08; letter-spacing: -.065em; }
+.muted { color: var(--muted); }
+.orange { color: var(--orange); }
+.violet { color: var(--violet); }
+
+.button { display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 56px; padding: 0 24px; border: 0; border-radius: 17px; font-weight: 800; font-size: 14px; transition: transform .2s, box-shadow .2s, background .2s; text-decoration: none; }
+.button:not(:disabled):hover { transform: translateY(-2px); }
+.button--purple { color: white; background: linear-gradient(135deg,#7560ee, #5942ce); box-shadow: 0 10px 26px rgba(104,83,222,.24); }
+.button--purple:not(:disabled):hover { box-shadow: 0 15px 30px rgba(104,83,222,.3); }
+.button--light { color: #5144a4; background: #f0edff; }
+.button--outline { background: #fff; color: #58586e; border: 1px solid #e3e3ed; }
+.button--wide { width: 100%; }
+.button--small { min-height: 44px; padding: 0 18px; font-size: 12px; border-radius: 12px; }
+.button:disabled { opacity: .46; box-shadow: none; }
+.button-arrow { font-size: 20px; font-weight: 500; line-height: 1; }
+.button-subtle { background: transparent; border: 0; font-size: 12px; color: #8d8ea0; text-decoration: underline; text-underline-offset: 4px; padding: 6px; }
+.button-subtle:hover { color: #5846d0; }
+
+/* WELCOME */
+.welcome { display: grid; grid-template-columns: 1.03fr .97fr; align-items: center; gap: clamp(20px,5vw,65px); min-height: 580px; padding: 25px 0 35px; }
+.welcome__copy { max-width: 590px; position: relative; z-index: 2; }
+.welcome h1 { font-size: clamp(47px,5.5vw,77px); margin: 25px 0 22px; }
+.welcome__description { color: #696d83; font-size: clamp(14px,1.5vw,17px); line-height: 1.85; max-width: 460px; margin-bottom: 28px; }
+.welcome__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
+.under-cta { display: flex; gap: 8px; align-items: center; color: #9a9aab; font-size: 12px; font-weight: 700; margin-top: 20px; }
+.under-cta svg { color: #62c5ad; }
+.welcome-art { min-height: 475px; position: relative; display: grid; place-items: center; }
+.welcome-art__back { position: absolute; width: 88%; height: 78%; border-radius: 41% 59% 47% 53% / 48% 43% 57% 52%; background: radial-gradient(circle at 38% 31%,#e8e0ff 0%,#f0e9ff 54%,#e6e9ff 100%); transform: rotate(-9deg); }
+.hero-card { position: relative; width: min(100%, 395px); min-height: 420px; border: 1px solid rgba(255,255,255,.9); border-radius: 34px; background: rgba(255,255,255,.83); box-shadow: 0 35px 80px rgba(58,48,116,.14); padding: 20px; backdrop-filter: blur(8px); transform: rotate(3deg); }
+.hero-card__top { display: flex; justify-content: space-between; align-items: center; color: #7f7c9d; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+.mini-dots { letter-spacing: 2px; color: #b4a9f6; font-size: 20px; line-height: 10px; }
+.hero-card__visual { position: relative; height: 255px; border-radius: 25px; margin-top: 18px; display: grid; place-items: center; background: linear-gradient(140deg,#f2ecff,#f4f3ff 64%,#ffe9de); overflow: hidden; }
+.hero-card__visual svg { width: 230px; max-height: 245px; filter: drop-shadow(0 10px 7px rgba(52,36,99,.09)); }
+.hero-card__name { font-size: 23px; font-weight: 800; letter-spacing: -.05em; margin: 16px 0 3px; }
+.hero-card__sub { font-size: 12px; font-weight: 700; color: #8e8ba5; }
+.float-bubble { position: absolute; z-index: 3; background: white; box-shadow: 0 15px 35px rgba(61,52,118,.12); border-radius: 17px; padding: 12px 16px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.float-bubble--left { left: -18px; top: 80px; transform: rotate(-9deg); }
+.float-bubble--right { right: -22px; bottom: 85px; transform: rotate(7deg); }
+.float-bubble span { font-size: 16px; margin-right: 6px; }
+.float-bubble--left span { color: #ff8751; }
+.float-bubble--right span { color: #6e5bdf; }
+
+/* SHARED PANELS */
+.stage { width: min(100%, 960px); margin: auto; padding: 25px 0 50px; }
+.stage--narrow { max-width: 755px; }
+.stage-heading { text-align: center; max-width: 625px; margin: 0 auto 27px; }
+.stage-heading h1 { font-size: clamp(29px,4vw,45px); line-height: 1.22; letter-spacing: -.055em; margin: 14px 0; }
+.stage-heading p { color: #838397; font-size: 14px; line-height: 1.7; }
+.paper { border: 1px solid rgba(226,226,237,.88); border-radius: 29px; background: #fff; box-shadow: var(--shadow); }
+.intro-panel { padding: clamp(22px,4.4vw,48px); }
+.intro-panel__top { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 24px; }
+.mini-step { border: 1px solid #ebe7ff; border-radius: 99px; padding: 8px 13px; font-size: 12px; font-weight: 800; color: #6a56d5; background: #f6f3ff; }
+.no-clock { display: flex; gap: 6px; color: #65a996; font-size: 11px; font-weight: 800; align-items: center; }
+.intro-fields { display: grid; gap: 24px; }
+.field-group label { display: block; font-size: 15px; color: #313044; font-weight: 800; margin-bottom: 6px; letter-spacing: -.02em; }
+.field-hint { font-size: 12px; color: #9b9baa; margin-bottom: 10px; line-height: 1.6; }
+.field-control { display: block; width: 100%; min-height: 75px; resize: vertical; background: #fbfbff; border: 1.5px solid #e9e8f2; border-radius: 16px; padding: 16px; outline: none; color: #302e48; font-size: 13px; line-height: 1.6; transition: border .2s, box-shadow .2s; }
+.field-control:focus { border-color: #a596fa; box-shadow: 0 0 0 4px #eeeaff; }
+.field-control::placeholder { color: #b9b8c8; }
+.field-control.is-invalid { border-color: #f5a4a3; }
+.field-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; color: #b4b3bf; font-size: 10px; }
+.field-warning { color: #d86767; font-size: 11px; font-weight: 700; }
+.intro-panel__bottom { border-top: 1px solid #f0eff5; margin-top: 29px; padding-top: 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.privacy-note { max-width: 315px; display: flex; gap: 9px; align-items: flex-start; color: #9c9ba9; font-size: 10px; line-height: 1.6; }
+.privacy-note .note-icon { font-size: 15px; flex: none; }
+
+/* QUIZ */
+.quiz-wrap { width: min(100%, 865px); margin: 18px auto 0; padding: 0 0 42px; }
+.quiz-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+.quiz-progress-text { font-size: 12px; font-weight: 800; color: #6c6985; }
+.quiz-progress-text span { color: #6a55df; }
+.timer { display: flex; gap: 9px; align-items: center; padding: 9px 13px; border: 1px solid #ece9f5; background: #fff; border-radius: 99px; color: #716e88; }
+.timer__ring { height: 20px; width: 20px; border-radius: 50%; background: conic-gradient(var(--violet) var(--timer-angle),#eeeaf9 0); display: grid; place-items: center; }
+.timer__ring::after { content: ''; display: block; height: 11px; width: 11px; border-radius: 50%; background: #fff; }
+.timer__clock { font-size: 12px; font-variant-numeric: tabular-nums; font-weight: 800; color: #4d466c; }
+.timer.is-urgent { border-color: #ffd4c8; background: #fff6f2; }
+.timer.is-urgent .timer__ring { background: conic-gradient(#ff7a54 var(--timer-angle),#ffe7df 0); }
+.timer.is-done { background: #fff6f2; border-color: #ffdcd1; }
+.progress-track { height: 7px; border-radius: 99px; overflow: hidden; background: #e9e8f4; margin-bottom: 23px; }
+.progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg,#765ff0,#b296fb,#ff9874); transition: width .4s ease; }
+.quiz-card { min-height: 465px; padding: clamp(22px,4.5vw,48px); }
+.quiz-card__header { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 18px; }
+.quiz-category { display: inline-flex; align-items: center; gap: 8px; color: #6c56de; font-size: 11px; font-weight: 800; background: #f1eeff; border-radius: 99px; padding: 9px 12px; }
+.quiz-category.green { color: #239475; background: #eaf9f3; }
+.quiz-category.red { color: #d76a6a; background: #fff0ee; }
+.quiz-dots { color: #d3d0e3; font-size: 20px; font-weight: 800; letter-spacing: 3px; }
+.quiz-title { max-width: 685px; font-size: clamp(24px,3.15vw,34px); line-height: 1.27; font-weight: 800; letter-spacing: -.05em; margin: 0 0 22px; }
+.quiz-hint { font-size: 12px; color: #9b98aa; margin: -8px 0 22px; }
+.choice-list { display: grid; gap: 12px; }
+.choice-list--multi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.choice { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; background: #f9f9fd; border: 1.5px solid #eeedf5; border-radius: 18px; min-height: 75px; padding: 16px 19px; color: #4a495e; transition: background .18s, border .18s, transform .18s, box-shadow .18s; }
+.choice:hover { border-color: #c7bbff; background: #f7f5ff; transform: translateY(-1px); }
+.choice.is-selected { background: #f2efff; border-color: #8c76ef; box-shadow: 0 0 0 2px #e8e0ff; }
+.choice__marker { flex: none; display: grid; place-items: center; height: 35px; width: 35px; border-radius: 11px; border: 1px solid #e3e1ee; background: white; color: #aea9c3; font-weight: 800; font-size: 13px; }
+.choice.is-selected .choice__marker { background: #7359e8; color: #fff; border-color: #7359e8; }
+.choice__text { flex: 1; font-size: clamp(12px,1.2vw,14px); font-weight: 700; line-height: 1.5; }
+.choice__tick { color: #afa5e9; flex: none; opacity: 0; font-weight: 800; }
+.choice.is-selected .choice__tick { opacity: 1; }
+.choice-list--multi .choice { min-height: 74px; }
+.choice-list--multi .choice__marker { width: 29px; height: 29px; border-radius: 9px; }
+.selection-count { display: flex; justify-content: space-between; color: #8c889e; font-size: 12px; font-weight: 700; margin-top: 18px; }
+.selection-count strong { color: #6b56dd; }
+.scale-options { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 42px 0 17px; }
+.scale-button { min-height: 84px; border: 1.5px solid #ebeaf4; background: #f9f9fd; border-radius: 19px; color: #6c6783; font-size: 27px; font-weight: 800; transition: .18s; }
+.scale-button:hover { background: #f1edff; border-color: #bbaefd; }
+.scale-button.is-selected { color: #fff; background: #7059e5; border-color: #7059e5; box-shadow: 0 9px 22px rgba(103,82,222,.23); }
+.scale-labels { display: flex; justify-content: space-between; gap: 14px; color: #9694aa; font-size: 11px; font-weight: 700; }
+.scale-labels span:last-child { text-align: right; }
+.quiz-bottom { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 0 0; }
+.back-button { min-height: 52px; min-width: 110px; border: 0; background: transparent; color: #8d8aa1; font-size: 13px; font-weight: 800; }
+.back-button:disabled { opacity: .3; }
+.quiz-bottom__right { display: flex; align-items: center; gap: 12px; }
+.question-tip { font-size: 11px; color: #a6a3b3; }
+.overtime-note { display: flex; gap: 10px; align-items: center; margin: 14px 0 0; padding: 13px 16px; border: 1px solid #fbe3d8; background: #fff5f0; color: #a86650; border-radius: 14px; font-size: 12px; line-height: 1.6; }
+
+/* RESULT */
+.result { width: min(100%, 1040px); margin: 0 auto; padding: 20px 0 55px; }
+.result-topline { display: flex; justify-content: center; }
+.result-title { font-size: clamp(32px,4.3vw,50px); letter-spacing: -.06em; line-height: 1.14; text-align: center; margin: 16px 0 13px; }
+.result-subtitle { color: #8e8b9f; line-height: 1.7; text-align: center; margin: 0 auto 28px; max-width: 650px; font-size: 13px; }
+.result-card { display: grid; grid-template-columns: minmax(265px,.84fr) minmax(330px,1.16fr); border-radius: 32px; overflow: hidden; border: 1px solid #e7e4f2; background: white; box-shadow: var(--shadow); }
+.result-card__art { position: relative; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; background: radial-gradient(circle at 50% 27%,#fdfaff,#eee8ff 70%,#e8e5ff); }
+.result-card__art::before { content: ''; position: absolute; width: 245px; height: 245px; border-radius: 50%; border: 1px solid rgba(125,90,216,.19); }
+.result-card__art::after { content: ''; position: absolute; width: 310px; height: 310px; border-radius: 50%; border: 1px dashed rgba(125,90,216,.13); }
+.avatar-stage { z-index: 1; width: 95%; max-width: 290px; filter: drop-shadow(0 17px 11px rgba(64,43,111,.1)); }
+.avatar-stage svg { display: block; width: 100%; height: auto; }
+.avatar-ribbon { z-index: 2; border-radius: 99px; color: #6953d5; background: white; box-shadow: 0 8px 25px rgba(96,75,163,.13); padding: 9px 18px; font-size: 11px; font-weight: 800; }
+.result-card__details { padding: clamp(25px,4vw,43px); }
+.result-label { color: #9b96b2; font-size: 10px; letter-spacing: .14em; font-weight: 800; }
+.persona-name { font-size: clamp(35px,4vw,51px); line-height: 1; font-weight: 800; letter-spacing: -.065em; margin: 13px 0 15px; }
+.persona-desc { font-size: 13px; color: #7f7d90; line-height: 1.8; margin-bottom: 26px; }
+.result-divider { height: 1px; background: #efedf5; margin: 23px 0; }
+.detail-label { font-size: 11px; color: #8e899f; font-weight: 800; margin-bottom: 12px; }
+.strength-list { display: flex; flex-wrap: wrap; gap: 9px; }
+.strength { display: inline-flex; padding: 11px 13px; border: 1px solid #eae6ff; border-radius: 12px; background: #f6f3ff; color: #6453c4; font-size: 11px; font-weight: 800; }
+.strength::before { content: '✳'; margin-right: 6px; color: #ff8754; }
+.energy-text { display: flex; gap: 12px; align-items: flex-start; font-size: 13px; color: #535169; font-weight: 700; line-height: 1.6; }
+.energy-icon { font-size: 20px; }
+.result-options { margin-top: 18px; border: 1px solid #ece9f4; background: white; border-radius: 22px; padding: 18px; }
+.result-options h3 { font-size: 15px; margin: 0 0 6px; }
+.result-options p { color: #9996a8; font-size: 11px; line-height: 1.6; margin-bottom: 15px; }
+.candidate-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 10px; }
+.candidate { text-align: left; border: 1.5px solid #e9e8f1; background: #fdfdff; padding: 12px; border-radius: 14px; display: flex; align-items: center; gap: 10px; transition: .2s; }
+.candidate:hover { border-color: #c9bcff; }
+.candidate.is-selected { border-color: #8b75ea; background: #f4f0ff; }
+.candidate svg { width: 42px; height: 42px; flex: none; }
+.candidate strong { display: block; font-size: 12px; }
+.candidate small { display: block; margin-top: 3px; color: #9994ad; font-size: 10px; }
+.next-step { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 25px 29px; margin-top: 18px; border-radius: 22px; background: #24233b; color: white; }
+.next-step__copy h3 { margin: 0 0 7px; font-size: 17px; }
+.next-step__copy p { color: #c5c2d7; font-size: 11px; line-height: 1.6; max-width: 520px; margin: 0; }
+.next-step .button { white-space: nowrap; background: #fff; color: #5f4bd7; min-height: 47px; font-size: 12px; }
+.feedback-bar { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.feedback-bar span { color: #888598; font-size: 12px; font-weight: 700; margin-right: 5px; }
+.feedback-btn { border: 1px solid #e5e4ed; border-radius: 99px; color: #727085; padding: 10px 14px; background: #fff; font-size: 11px; font-weight: 800; }
+.feedback-btn:hover { background: #f6f2ff; border-color: #c7b9ff; }
+.feedback-btn.is-selected { color: #5c46c6; background: #efeaff; border-color: #9c8ceb; }
+.result-actions { margin-top: 18px; display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.result-footnote { text-align: center; color: #b3aebe; font-size: 10px; max-width: 660px; line-height: 1.65; margin: 16px auto 0; }
+
+/* DIALOGS, NOTICES */
+.dialog { width: min(440px, calc(100% - 32px)); max-height: calc(100% - 35px); overflow-y: auto; border: 1px solid #e6e3f2; background: white; border-radius: 26px; padding: 0; color: var(--ink); box-shadow: 0 30px 100px rgba(30,23,70,.22); }
+.dialog::backdrop { background: rgba(25,22,52,.39); backdrop-filter: blur(5px); }
+.dialog-inner { padding: 35px; position: relative; }
+.dialog-inner h2 { font-size: 25px; letter-spacing: -.05em; line-height: 1.26; margin: 10px 0 16px; }
+.dialog-inner p { color: #797789; font-size: 12px; line-height: 1.8; margin-bottom: 12px; }
+.dialog-close { position: absolute; right: 16px; top: 16px; width: 30px; height: 30px; font-size: 22px; }
+.dialog-callout { margin: 19px 0; padding: 16px; border-radius: 12px; background: #f4f0ff; color: #6851cb; font-weight: 700; font-size: 11px; line-height: 1.65; }
+.toast { position: fixed; z-index: 30; left: 50%; bottom: 26px; transform: translate(-50%, 70px); border-radius: 14px; padding: 13px 20px; background: #2a2540; color: white; font-size: 12px; font-weight: 700; box-shadow: 0 10px 28px rgba(24,18,53,.2); opacity: 0; pointer-events: none; transition: opacity .2s,transform .2s; max-width: calc(100% - 20px); text-align: center; }
+.toast.is-visible { opacity: 1; transform: translate(-50%,0); }
+.confetti { position: absolute; height: 7px; width: 7px; border-radius: 2px; background: #fb975d; }
+
+@media (max-width: 910px) {
+  .welcome { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .welcome h1 { font-size: clamp(41px,6.4vw,59px); }
+  .hero-card { width: 95%; }
+  .float-bubble--left { left: -10px; }
+  .float-bubble--right { right: -6px; }
+}
+@media (max-width: 730px) {
+  .app-shell { width: min(100% - 32px, 570px); }
+  .site-header { min-height: 83px; }
+  .header-tag { display: none; }
+  .welcome { padding: 35px 0; grid-template-columns: 1fr; min-height: auto; gap: 34px; }
+  .welcome__copy { text-align: center; margin: 0 auto; }
+  .welcome .eyebrow { margin: 0 auto; }
+  .welcome h1 { font-size: clamp(48px,10.6vw,68px); margin: 20px 0 15px; }
+  .welcome__description { margin: 0 auto 23px; }
+  .welcome__actions, .under-cta { justify-content: center; }
+  .welcome-art { min-height: 390px; }
+  .hero-card { width: 330px; min-height: 380px; padding: 17px; }
+  .hero-card__visual { height: 220px; }
+  .hero-card__visual svg { width: 207px; }
+  .float-bubble--left { left: 5px; top: 45px; }
+  .float-bubble--right { right: 3px; bottom: 55px; }
+  .result-card { grid-template-columns: 1fr; }
+  .result-card__art { min-height: 310px; }
+  .avatar-stage { max-width: 220px; }
+  .result-card__art::before { width: 210px; height: 210px; }
+  .result-card__art::after { width: 275px; height: 275px; }
+  .result-card__details { padding: 28px; }
+  .next-step { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 480px) {
+  .app-shell { width: calc(100% - 28px); }
+  .brand { font-size: 25px; }
+  .brand-symbol { font-size: 23px; margin-right: 0; }
+  .site-footer { flex-direction: column; text-align: center; justify-content: center; gap: 5px; padding: 12px 0; }
+  .welcome h1 { font-size: clamp(41px,11.5vw,55px); }
+  .welcome__description { font-size: 13px; }
+  .welcome-art { min-height: 350px; }
+  .hero-card { width: 85%; min-height: 344px; padding: 14px; border-radius: 24px; }
+  .hero-card__visual { height: 195px; margin-top: 13px; }
+  .hero-card__visual svg { width: 190px; }
+  .hero-card__name { font-size: 20px; }
+  .float-bubble { padding: 10px; font-size: 10px; }
+  .float-bubble--left { left: 1px; }
+  .float-bubble--right { right: 0; bottom: 25px; }
+  .stage { padding: 16px 0 27px; }
+  .stage-heading h1 { font-size: 30px; }
+  .intro-panel { padding: 20px; border-radius: 22px; }
+  .intro-panel__bottom .button { width: 100%; }
+  .quiz-wrap { margin-top: 9px; }
+  .quiz-card { border-radius: 22px; min-height: 420px; padding: 22px 19px; }
+  .quiz-title { font-size: 23px; }
+  .choice { gap: 10px; padding: 13px 12px; border-radius: 14px; min-height: 69px; }
+  .choice__marker { width: 31px; height: 31px; }
+  .choice-list--multi { grid-template-columns: 1fr; gap: 9px; }
+  .choice-list--multi .choice { min-height: 62px; }
+  .choice__text { font-size: 12px; }
+  .scale-options { gap: 7px; margin: 30px 0 16px; }
+  .scale-button { min-height: 70px; border-radius: 13px; font-size: 24px; }
+  .question-tip { display: none; }
+  .quiz-bottom { padding-top: 15px; }
+  .back-button { min-width: 80px; }
+  .quiz-bottom .button { min-height: 52px; padding: 0 18px; }
+  .result-title { font-size: 35px; }
+  .result-card__details { padding: 24px 20px; }
+  .persona-name { font-size: 37px; }
+  .next-step { padding: 22px; }
+  .next-step .button { width: 100%; }
+  .dialog-inner { padding: 27px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+</style>
+  </head>
+  <body>
+    <div class="ambient ambient--one" aria-hidden="true"></div>
+    <div class="ambient ambient--two" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="./" id="brand-link" aria-label="VibeHunt — на главную">
+          <span class="brand-symbol" aria-hidden="true">✳</span>
+          <span class="brand-word"><span>vibe</span><span>hunt</span></span>
+          <span class="brand-period" aria-hidden="true">.</span>
+        </a>
+        <div class="header-right">
+          <span class="header-tag"><span class="status-dot" aria-hidden="true"></span> Твой рабочий вайб</span>
+          <button class="icon-button help-toggle" id="help-button" aria-label="О тестировании" title="О тестировании" type="button">?</button>
+        </div>
+      </header>
+
+      <main id="app" tabindex="-1" aria-live="polite" aria-relevant="additions text"></main>
+
+      <footer class="site-footer">
+        <span>© VibeHunt</span>
+        <span>Не экзамен. Просто повод узнать себя получше ✳</span>
+      </footer>
+    </div>
+
+    <dialog id="info-dialog" class="dialog">
+      <div class="dialog-inner">
+        <button class="dialog-close icon-button" type="button" aria-label="Закрыть" data-close-dialog>×</button>
+        <div class="small-eyebrow">ПАРА СЛОВ О ТЕСТЕ</div>
+        <h2>Здесь нет правильных ответов</h2>
+        <p>Ты выбираешь то, что действительно тебе близко. По ответам мы предложим одного из 15 персонажей Вайбо и покажем твои возможные суперсилы.</p>
+        <p>Вопросы о девизе, руководителе и команде — без таймера. Потом начнутся 23 коротких задания и отсчёт пяти минут.</p>
+        <div class="dialog-callout">Это игровой профиль рабочих предпочтений, а не проверка способностей или оценка пригодности к работе.</div>
+        <button class="button button--purple button--wide" type="button" data-close-dialog>Понятно!</button>
+      </div>
+    </dialog>
+
+    <dialog id="next-dialog" class="dialog">
+      <div class="dialog-inner">
+        <button class="dialog-close icon-button" type="button" aria-label="Закрыть" data-close-dialog>×</button>
+        <div class="small-eyebrow">ПРОДОЛЖЕНИЕ СЛЕДУЕТ</div>
+        <h2>Это только начало твоей истории</h2>
+        <p>В полной версии VibeHunt будет большое тестирование: подробный профиль, больше суперсил и личный маршрут карьерного развития.</p>
+        <div class="dialog-callout">Пока доступно короткое знакомство с Вайбо. Полная версия с личным планом развития появится позже.</div>
+        <button class="button button--purple button--wide" type="button" data-close-dialog>Вернуться к моему Вайбо</button>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script>
+// VibeHunt 5.0 — тексты и ключи отдельно от интерфейса.
+// Коды используются только в расчёте и никогда не показываются участнику.
+
+const introQuestions = [
+  {
+    title: 'Какой у тебя рабочий девиз?',
+    hint: 'Фраза, с которой ты обычно идёшь по рабочим задачам.',
+    placeholder: 'Например: «Сначала пробуем — потом улучшаем»',
+    maxLength: 180,
+  },
+  {
+    title: 'Какой руководитель для тебя идеален?',
+    hint: 'Подумай о том, с кем тебе действительно комфортно работать.',
+    placeholder: 'Для меня идеальный руководитель — это…',
+    maxLength: 180,
+  },
+  {
+    title: 'Какая команда для тебя идеальна?',
+    hint: 'Опиши людей и атмосферу, в которых тебе хорошо.',
+    placeholder: 'Моя идеальная команда — это…',
+    maxLength: 180,
+  },
+];
+
+function question(type, prompt, options = [], extra = {}) {
+  return { type, prompt, options, ...extra };
+}
+function option(label, factor) { return { label, factor }; }
+
+const questions = [
+  question('pair', 'Появилась задача без готового решения. Что интереснее?', [
+    option('Придумать несколько необычных идей.', 'K'),
+    option('Проверить пару вариантов на практике.', 'N'),
+  ]),
+  question('pair', 'Команда запускает новый проект. Что тебе ближе?', [
+    option('Быстро сделать первый рабочий вариант.', 'D'),
+    option('Придумать необычный подход к задаче.', 'K'),
+  ]),
+  question('pair', 'Проект только начинается. Чем хочется заняться?', [
+    option('Предложить свежую идею для проекта.', 'K'),
+    option('Разложить работу на понятные шаги.', 'S'),
+  ]),
+  question('pair', 'На встрече команда ищет решение. Как включишься?', [
+    option('Помогу коллегам договориться об общем решении.', 'C'),
+    option('Предложу необычную идею для обсуждения.', 'K'),
+  ]),
+  question('pair', 'Нужно улучшить привычную работу. Что интереснее?', [
+    option('Проверить новый способ на небольшой задаче.', 'N'),
+    option('Сразу сделать полезное изменение в работе.', 'D'),
+  ]),
+  question('pair', 'Появился новый рабочий сервис. Что тебе ближе?', [
+    option('Составить понятную инструкцию по шагам.', 'S'),
+    option('Попробовать разные функции на практике.', 'N'),
+  ]),
+  question('pair', 'Коллеги предлагают работать по-новому. Что выберешь?', [
+    option('Проверить новый подход на небольшом примере.', 'N'),
+    option('Обсудить изменения со всей командой.', 'C'),
+  ]),
+  question('pair', 'Дел много, а времени мало. С чего начнёшь?', [
+    option('Закрою одну важную задачу целиком.', 'D'),
+    option('Расставлю дела по срокам и важности.', 'S'),
+  ]),
+  question('pair', 'Команда отстаёт от плана. Как поможешь?', [
+    option('Помогу коллегам согласовать следующие шаги.', 'C'),
+    option('Возьму часть работы и доведу до конца.', 'D'),
+  ]),
+  question('pair', 'В общем проекте возникла путаница. Что ближе?', [
+    option('Составить понятный план и сроки.', 'S'),
+    option('Помочь распределить роли между коллегами.', 'C'),
+  ]),
+  question('scale', 'Насколько тебе интересны задачи, в которых можно придумывать необычные решения?', [], { factor: 'K' }),
+  question('scale', 'Насколько тебе интересны задачи, в которых можно проверять новые подходы?', [], { factor: 'N' }),
+  question('scale', 'Насколько тебе интересны задачи, в которых можно быстро получать конкретный результат?', [], { factor: 'D' }),
+  question('scale', 'Насколько тебе интересны задачи, в которых можно создавать понятную систему работы?', [], { factor: 'S' }),
+  question('scale', 'Насколько тебе интересны задачи, в которых можно налаживать взаимодействие людей?', [], { factor: 'C' }),
+  question('multi', 'Какие качества тебе ближе всего? Выбери два.', [
+    option('Креативность', 'K'),
+    option('Любознательность', 'N'),
+    option('Решительность', 'D'),
+    option('Организованность', 'S'),
+    option('Умение договариваться', 'C'),
+  ], { required: 2 }),
+  question('multi', 'Какие два утверждения больше про тебя?', [
+    option('Быстро перехожу от слов к делу.', 'D'),
+    option('Помогаю коллегам найти общий язык.', 'C'),
+    option('Люблю проверять идеи на практике.', 'N'),
+    option('Часто придумываю новые способы решения.', 'K'),
+    option('Умею раскладывать задачи по шагам.', 'S'),
+  ], { required: 2 }),
+  question('multi', 'Чем ты чаще всего помогаешь команде? Выбери два.', [
+    option('Делаю запутанное понятным.', 'S'),
+    option('Предлагаю неожиданные идеи.', 'K'),
+    option('Помогаю коллегам работать сообща.', 'C'),
+    option('Довожу важные задачи до результата.', 'D'),
+    option('Нахожу улучшения через пробы.', 'N'),
+  ], { required: 2 }),
+  question('multi', 'Какие два зелёных флага компании самые важные?', [
+    option('Можно самому выбирать способ работы.', 'A'),
+    option('Коллеги помогают друг другу.', 'B'),
+    option('Есть возможность учиться новому.', 'M'),
+    option('Доверяют принимать свои решения.', 'A'),
+    option('Помогают расти в профессии.', 'M'),
+    option('Команда радуется общим победам.', 'B'),
+  ], { required: 2, mood: 'green' }),
+  question('multi', 'Какие два красных флага оттолкнут сильнее всего?', [
+    option('Нет возможности осваивать новое.', 'M'),
+    option('Каждый шаг нужно согласовывать.', 'A'),
+    option('Коллеги не поддерживают друг друга.', 'B'),
+    option('Нет шансов расти в профессии.', 'M'),
+    option('Общие результаты никого не волнуют.', 'B'),
+    option('Решениям сотрудников не доверяют.', 'A'),
+  ], { required: 2, mood: 'red' }),
+  question('single', 'Какую фразу от руководителя приятнее услышать?', [
+    option('Сам выбирай, как действовать.', 'A'),
+    option('Помогу тебе освоить новое.', 'M'),
+    option('Давай поддержим всю команду.', 'B'),
+  ], { mood: 'green' }),
+  question('single', 'Какая фраза от руководителя расстроит сильнее?', [
+    option('На обучение нет времени.', 'M'),
+    option('Мнение команды не важно.', 'B'),
+    option('Любой шаг согласуй со мной.', 'A'),
+  ], { mood: 'red' }),
+  question('single', 'В какой команде тебе хотелось бы работать?', [
+    option('Коллеги поддерживают друг друга.', 'B'),
+    option('Каждый сам выбирает подход.', 'A'),
+    option('Все делятся опытом и учатся.', 'M'),
+  ], { mood: 'green' }),
+];
+
+const styles = {
+  K: { name: 'Креатор', color: '#9b6bff', tagline: 'Ты видишь необычное там, где другие замечают привычное.', symbol: 'spark' },
+  N: { name: 'Новатор', color: '#46cbb7', tagline: 'Тебя вдохновляет возможность пробовать и открывать новое.', symbol: 'flask' },
+  D: { name: 'Драйвер', color: '#ff9364', tagline: 'Ты превращаешь идеи в конкретные шаги и результат.', symbol: 'bolt' },
+  S: { name: 'Систематизатор', color: '#6e92fa', tagline: 'Ты умеешь находить порядок даже в сложных задачах.', symbol: 'grid' },
+  C: { name: 'Связующий', color: '#ff79a5', tagline: 'Ты помогаешь людям услышать друг друга и быть командой.', symbol: 'link' },
+};
+
+const motivations = {
+  A: { name: 'Свобода действий', short: 'Свобода', caption: 'Когда тебе доверяют выбор и дают пространство для инициативы.' },
+  M: { name: 'Рост мастерства', short: 'Развитие', caption: 'Когда можно узнавать новое и становиться сильнее в своём деле.' },
+  B: { name: 'Команда и общее дело', short: 'Команда', caption: 'Когда рядом свои люди, а общие победы действительно радуют.' },
+};
+
+const personaRows = [
+  ['K','A','Визионер','Оригинальные идеи','Самостоятельный творческий поиск','Свобода творчества и собственные инициативы'],
+  ['K','M','Алхимик','Необычные сочетания идей','Творческое совершенствование','Новые навыки и личный прогресс'],
+  ['K','B','Искра','Командный креатив','Соединение идей людей','Совместное творчество и обмен идеями'],
+  ['N','A','Экспериментатор','Проверка гипотез','Самостоятельный поиск улучшений','Свобода экспериментировать'],
+  ['N','M','Изобретатель','Улучшения через пробы','Освоение новых методов','Прототипы, практика и развитие'],
+  ['N','B','Катализатор','Совместные эксперименты','Развитие изменений','Общие пилоты и командные улучшения'],
+  ['D','A','Драйвер','Инициативность','Продвижение задач','Личные цели и самостоятельность'],
+  ['D','M','Тактик','Практическое обучение','Совершенствование действий','Сложные задачи и видимый прогресс'],
+  ['D','B','Локомотив','Командный импульс','Достижение общих целей','Совместные миссии и общий результат'],
+  ['S','A','Архитектор','Системное проектирование','Организация сложного','Самостоятельное создание процессов'],
+  ['S','M','Ювелир','Точность','Совершенствование качества','Экспертные задачи и рост мастерства'],
+  ['S','B','Опора','Структура общей работы','Последовательность','Слаженные процессы и общие стандарты'],
+  ['C','A','Дипломат','Согласование позиций','Организация взаимодействия','Доверие и свобода взаимодействия'],
+  ['C','M','Проводник','Обмен знаниями','Объяснение сложного','Совместное обучение и обратная связь'],
+  ['C','B','Магнит','Создание связей','Поддержка сотрудничества','Общее дело и коллективный результат'],
+];
+
+const personas = Object.fromEntries(personaRows.map(([style, motive, name, a, b, energy]) => [
+  `${style}|${motive}`,
+  { id: `${style}|${motive}`, style, motive, name, strengths: [a, b], energy },
+]));
+
+const TEST_SECONDS = 5 * 60;
+
+
+
+const STYLE_WEIGHTS = Object.freeze({ pairs: 0.60, qualities: 0.25, interest: 0.15 });
+const MOTIVE_WEIGHTS = Object.freeze({ green: 0.80, red: 0.20 });
+const STYLE_NEAR_THRESHOLD = 0.08;
+const MOTIVE_NEAR_THRESHOLD = 0.10;
+
+function isValidAnswer(question, answer) {
+  if (question.type === 'scale') return Number.isInteger(answer) && answer >= 1 && answer <= 5;
+  if (question.type === 'multi') {
+    return Array.isArray(answer) && answer.length === question.required &&
+      new Set(answer).size === answer.length &&
+      answer.every(index => Number.isInteger(index) && index >= 0 && index < question.options.length);
+  }
+  return Number.isInteger(answer) && answer >= 0 && answer < question.options.length;
+}
+
+function isComplete(answers) {
+  return Array.isArray(answers) && answers.length === questions.length &&
+    questions.every((question, index) => isValidAnswer(question, answers[index]));
+}
+
+function countByFactor(answers, from, to, codes) {
+  const counts = Object.fromEntries(codes.map(code => [code, 0]));
+  for (let i = from; i <= to; i++) {
+    const chosen = Array.isArray(answers[i]) ? answers[i] : [answers[i]];
+    for (const index of chosen) counts[questions[i].options[index].factor]++;
+  }
+  return counts;
+}
+
+function rank(scoreMap) {
+  return Object.entries(scoreMap)
+    .map(([key, value]) => ({ key, value }))
+    .sort((a, b) => b.value - a.value || a.key.localeCompare(b.key));
+}
+
+function calculateProfile(answers) {
+  if (!isComplete(answers)) throw new Error('Нужно ответить на все 23 вопроса.');
+
+  const styleCodes = Object.keys(styles);
+  const motiveCodes = Object.keys(motivations);
+  const pairCounts = countByFactor(answers, 0, 9, styleCodes);
+  const qualityCounts = countByFactor(answers, 15, 17, styleCodes);
+  const greenCounts = Object.fromEntries(motiveCodes.map(code => [code, 0]));
+  const redCounts = Object.fromEntries(motiveCodes.map(code => [code, 0]));
+
+  for (const index of [18, 20, 22]) {
+    const chosen = Array.isArray(answers[index]) ? answers[index] : [answers[index]];
+    for (const choice of chosen) greenCounts[questions[index].options[choice].factor]++;
+  }
+  for (const index of [19, 21]) {
+    const chosen = Array.isArray(answers[index]) ? answers[index] : [answers[index]];
+    for (const choice of chosen) redCounts[questions[index].options[choice].factor]++;
+  }
+
+  const styleScores = Object.fromEntries(styleCodes.map((code, i) => [code,
+    STYLE_WEIGHTS.pairs * pairCounts[code] / 4 +
+    STYLE_WEIGHTS.qualities * qualityCounts[code] / 3 +
+    STYLE_WEIGHTS.interest * (answers[10 + i] - 1) / 4,
+  ]));
+  const motiveScores = Object.fromEntries(motiveCodes.map(code => [code,
+    MOTIVE_WEIGHTS.green * greenCounts[code] / 4 +
+    MOTIVE_WEIGHTS.red * redCounts[code] / 3,
+  ]));
+
+  const styleRanking = rank(styleScores);
+  const motiveRanking = rank(motiveScores);
+  const styleGap = styleRanking[0].value - styleRanking[1].value;
+  const motiveGap = motiveRanking[0].value - motiveRanking[1].value;
+
+  const matchedStyles = styleRanking.filter(item => styleRanking[0].value - item.value < STYLE_NEAR_THRESHOLD + 1e-10)
+    .map(item => item.key);
+  const matchedMotives = motiveRanking.filter(item => motiveRanking[0].value - item.value < MOTIVE_NEAR_THRESHOLD + 1e-10)
+    .map(item => item.key);
+
+  const candidates = matchedStyles.flatMap(style =>
+    matchedMotives.map(motive => personas[`${style}|${motive}`]));
+
+  return {
+    styleScores, motiveScores, pairCounts, qualityCounts, greenCounts, redCounts,
+    styleRanking, motiveRanking, styleGap, motiveGap,
+    primaryStyle: styleRanking[0].key,
+    primaryMotive: motiveRanking[0].key,
+    primary: personas[`${styleRanking[0].key}|${motiveRanking[0].key}`],
+    ambiguous: styleGap < STYLE_NEAR_THRESHOLD || motiveGap < MOTIVE_NEAR_THRESHOLD,
+    candidates,
+  };
+}
+
+
+
+
+const STORE_KEY = 'vibehunt-mvp-5.0-session';
+const root = document.querySelector('#app');
+const infoDialog = document.querySelector('#info-dialog');
+const nextDialog = document.querySelector('#next-dialog');
+const toast = document.querySelector('#toast');
+const moodEmoji = { green: '✳', red: '⚑' };
+let toastTimer = null;
+let svgSequence = 0;
+
+function initialState() {
+  return {
+    screen: 'welcome',
+    intros: ['', '', ''],
+    answers: Array(questions.length).fill(null),
+    position: 0,
+    deadline: null,
+    startedAt: null,
+    completedAt: null,
+    chosenPersona: null,
+    feedback: null,
+  };
+}
+
+function loadState() {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(STORE_KEY) || 'null');
+    if (!stored || !Array.isArray(stored.intros) || stored.intros.length !== 3 ||
+        !Array.isArray(stored.answers) || stored.answers.length !== questions.length ||
+        !['welcome', 'intro', 'quiz', 'result'].includes(stored.screen)) return initialState();
+    if (!Number.isInteger(stored.position) || stored.position < 0 || stored.position >= questions.length) return initialState();
+    if (stored.screen === 'result' && !isComplete(stored.answers)) return initialState();
+    if (stored.screen === 'quiz' && (!Number.isFinite(stored.deadline) || !Number.isFinite(stored.startedAt))) return initialState();
+    return { ...initialState(), ...stored };
+  } catch { return initialState(); }
+}
+
+let state = loadState();
+
+function save() {
+  try { sessionStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  catch { /* Browsers with blocked storage can still run the test. */ }
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;',
+  }[character]));
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add('is-visible');
+  window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 3000);
+}
+
+function svgSymbol(styleCode, x = 148, y = 237) {
+  const ink = '#3c335e';
+  switch (styleCode) {
+    case 'K': return `<path d="M${x} ${y-24} l8 16 18 3 -13 12 3 19 -18 -10 -16 10 3 -19 -13 -12 18 -3z" fill="#fff7af" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>`;
+    case 'N': return `<g stroke="${ink}" stroke-width="4" stroke-linejoin="round"><path d="M${x-8} ${y-22} h16 M${x-4} ${y-22} v17 l-20 22 q-4 8 5 8 h38 q9 0 5-8 l-20-22 v-17" fill="#e7fff7"/><path d="M${x-18} ${y+4} h36" stroke="#67c8bc"/></g>`;
+    case 'D': return `<path d="M${x+3} ${y-29} l-23 33 h16 l-4 24 28 -36 h-18z" fill="#fff1b2" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>`;
+    case 'S': return `<g stroke="${ink}" stroke-width="3.6"><rect x="${x-21}" y="${y-22}" width="18" height="18" rx="4" fill="#e8f2ff"/><rect x="${x+3}" y="${y-22}" width="18" height="18" rx="4" fill="#fff"/><rect x="${x-21}" y="${y+2}" width="18" height="18" rx="4" fill="#fff"/><rect x="${x+3}" y="${y+2}" width="18" height="18" rx="4" fill="#e8f2ff"/></g>`;
+    case 'C': return `<path d="M${x} ${y+22} C${x-45} ${y-7} ${x-18} ${y-36} ${x} ${y-15} C${x+18} ${y-36} ${x+45} ${y-7} ${x} ${y+22}Z" fill="#fff1f6" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>`;
+    default: return '';
+  }
+}
+
+function accessory(styleCode) {
+  switch (styleCode) {
+    case 'K': return `<path d="M114 54 l10-18 10 18 19 8 -19 9 -10 18 -10-18 -19-9Z" fill="#fff0a8" stroke="#39304f" stroke-width="5" stroke-linejoin="round"/><path d="M193 67 l6-10 6 10 11 5 -11 5 -6 11 -6-11 -10-5Z" fill="#fff0a8"/>`;
+    case 'N': return `<path d="M122 75 q-35-43-1-50 q30-4 25 31 M181 70 q32-42 48-12" stroke="#39304f" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="121" cy="25" r="11" fill="#c7fff0" stroke="#39304f" stroke-width="5"/><circle cx="229" cy="57" r="9" fill="#ffe49a" stroke="#39304f" stroke-width="5"/>`;
+    case 'D': return `<path d="M116 89 99 51 137 62 146 26 185 74" fill="#ffd38f" stroke="#39304f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M194 66 207 36 222 66" fill="#fff1aa" stroke="#39304f" stroke-width="5" stroke-linejoin="round"/>`;
+    case 'S': return `<path d="M111 85 V43 q0-13 13-13 h68 q13 0 13 13 v42" fill="#a7bafa" stroke="#39304f" stroke-width="6"/><path d="M127 56h62 M127 69h42" stroke="#fff" stroke-width="6" stroke-linecap="round"/>`;
+    case 'C': return `<path d="M113 90 Q78 47 105 37 Q126 31 146 59 Q160 25 183 38 Q211 52 185 91" fill="#ffa7bd" stroke="#39304f" stroke-width="6" stroke-linejoin="round"/><circle cx="218" cy="70" r="12" fill="#ffe5a1" stroke="#39304f" stroke-width="5"/>`;
+    default: return '';
+  }
+}
+
+function motiveAccents(motive) {
+  if (motive === 'A') return `<path d="M76 154 l-25 -10 M79 178 l-31 3 M230 157 l29 -10 M232 181 l28 2" stroke="#6b5aa2" stroke-width="5" stroke-linecap="round" opacity=".63"/><path d="M260 215 l7 -11 7 11 11 5 -11 5 -7 11 -7 -11 -11-5Z" fill="#ffe2a3"/>`;
+  if (motive === 'M') return `<path d="M67 199 l9 -12 9 12 14 5 -14 5 -9 13 -9 -13 -13 -5Z" fill="#ffe99a" stroke="#514382" stroke-width="3"/><circle cx="257" cy="147" r="13" fill="#ffe1a9" stroke="#514382" stroke-width="4"/><path d="m251 147 4 4 8-9" fill="none" stroke="#514382" stroke-width="3.5" stroke-linecap="round"/>`;
+  return `<circle cx="70" cy="163" r="13" fill="#f4b2ce" stroke="#514382" stroke-width="4"/><circle cx="258" cy="157" r="13" fill="#a5e0f0" stroke="#514382" stroke-width="4"/><path d="M82 166 Q107 187 121 180 M245 167 Q227 187 213 180" fill="none" stroke="#8b80be" stroke-width="3" stroke-dasharray="4 7" stroke-linecap="round"/>`;
+}
+
+function avatarSvg(persona, extraClass = '') {
+  const uid = `av${++svgSequence}`;
+  const color = styles[persona.style].color;
+  const isTeam = persona.motive === 'B';
+  const bodyHighlight = persona.motive === 'M' ? '#d7d2ff' : persona.motive === 'A' ? '#f4ddff' : '#ffdfed';
+  const eyes = persona.style === 'S'
+    ? `<rect x="120" y="146" width="10" height="14" rx="5" fill="#332941"/><rect x="177" y="146" width="10" height="14" rx="5" fill="#332941"/>`
+    : persona.style === 'D'
+      ? `<path d="M119 147 l14 5 M176 152 l14-5" stroke="#332941" stroke-width="6" stroke-linecap="round"/>`
+      : `<ellipse cx="126" cy="152" rx="5.5" ry="8" fill="#332941"/><ellipse cx="183" cy="152" rx="5.5" ry="8" fill="#332941"/>`;
+  const mouth = persona.style === 'N'
+    ? `<path d="M142 174 q13 18 27 0" fill="none" stroke="#463359" stroke-width="4.5" stroke-linecap="round"/>`
+    : `<path d="M143 175 q11 11 23 0" fill="none" stroke="#463359" stroke-width="4.5" stroke-linecap="round"/>`;
+  return `<svg class="${extraClass}" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Иллюстрация Вайбо ${escapeHtml(persona.name)}">
+    <defs>
+      <linearGradient id="body-${uid}" x1=".16" y1="0" x2=".86" y2="1"><stop stop-color="#fff" stop-opacity=".58"/><stop offset=".3" stop-color="${color}"/><stop offset="1" stop-color="${color}"/></linearGradient>
+      <linearGradient id="belly-${uid}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="${bodyHighlight}"/></linearGradient>
+    </defs>
+    <ellipse cx="160" cy="285" rx="85" ry="16" fill="#7360ae" opacity=".10"/>
+    ${motiveAccents(persona.motive)}
+    <path d="M107 217 Q72 211 70 243 Q66 265 88 263 L122 241" fill="${color}" stroke="#39304f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M204 215 Q246 209 251 241 Q256 262 232 262 L201 239" fill="${color}" stroke="#39304f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M129 252 Q109 267 111 282 Q130 293 147 276 L157 251 M170 252 Q190 267 190 282 Q210 294 225 276 L207 252" fill="${color}" stroke="#39304f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M98 186 Q94 151 115 131 Q132 111 166 114 Q200 114 220 137 Q237 155 223 203 Q227 246 192 268 Q163 281 129 264 Q96 244 98 186Z" fill="url(#body-${uid})" stroke="#39304f" stroke-width="6" stroke-linejoin="round"/>
+    <ellipse cx="159" cy="234" rx="52" ry="36" fill="url(#belly-${uid})" stroke="#39304f" stroke-width="4"/>
+    ${svgSymbol(persona.style,159,236)}
+    <path d="M100 147 Q86 108 119 87 Q146 64 184 85 Q232 96 226 145 Q223 199 157 207 Q97 204 100 147Z" fill="url(#body-${uid})" stroke="#39304f" stroke-width="6"/>
+    <path d="M109 111 Q129 86 155 91" stroke="#fff" opacity=".48" stroke-width="10" stroke-linecap="round" fill="none"/>
+    ${eyes}
+    <ellipse cx="103" cy="174" rx="12" ry="7" fill="#ff8ca2" opacity=".50"/>
+    <ellipse cx="205" cy="174" rx="12" ry="7" fill="#ff8ca2" opacity=".50"/>
+    ${mouth}
+    ${accessory(persona.style)}
+    ${isTeam ? `<circle cx="62" cy="227" r="9" fill="#ffdc8b" stroke="#39304f" stroke-width="3"/><circle cx="253" cy="224" r="9" fill="#ffdc8b" stroke="#39304f" stroke-width="3"/>` : ''}
+  </svg>`;
+}
+
+function renderWelcome() {
+  const hero = personas['K|B'];
+  root.innerHTML = `
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div class="welcome__copy">
+        <div class="eyebrow"><span class="mini-spark">✳</span> Привет, знакомиться будем?</div>
+        <h1 class="display" id="welcome-title">У каждого свой<br><span class="violet">рабочий</span> <span class="orange">вайб.</span></h1>
+        <p class="welcome__description">Одни зажигают идеями, другие превращают хаос в систему, третьи собирают вокруг себя людей. А что делает особенным тебя?</p>
+        <div class="welcome__actions">
+          <button type="button" class="button button--purple" id="start-intro">Найти свой Вайбо <span class="button-arrow">↗</span></button>
+          <button type="button" class="button button--light" id="about-test">Как это работает?</button>
+        </div>
+        <div class="under-cta"><span aria-hidden="true">✦</span> 15 персонажей · 23 задания · 5 минут на тест</div>
+      </div>
+      <div class="welcome-art" aria-hidden="true">
+        <div class="welcome-art__back"></div>
+        <div class="hero-card">
+          <div class="hero-card__top"><span>ТВОЙ ВАЙБО ЖДЁТ</span><span class="mini-dots">•••</span></div>
+          <div class="hero-card__visual">${avatarSvg(hero)}</div>
+          <div class="hero-card__name">А кто ты?</div>
+          <div class="hero-card__sub">Узнай свои рабочие суперсилы ✳</div>
+        </div>
+        <div class="float-bubble float-bubble--left"><span>✦</span> Твои суперсилы</div>
+        <div class="float-bubble float-bubble--right"><span>♡</span> Найди себя</div>
+      </div>
+    </section>`;
+  document.querySelector('#start-intro').addEventListener('click', () => {
+    state.screen = 'intro'; save(); render(true);
+  });
+  document.querySelector('#about-test').addEventListener('click', () => infoDialog.showModal());
+}
+
+function renderIntro() {
+  root.innerHTML = `
+    <section class="stage stage--narrow" aria-labelledby="intro-title">
+      <div class="stage-heading">
+        <div class="eyebrow">✳ Без спешки, без оценок</div>
+        <h1 id="intro-title">Сначала немного <span class="violet">о тебе</span></h1>
+        <p>Три коротких вопроса для знакомства. Отвечай как хочется — можно даже пропустить вопрос. Пять минут начнутся только потом.</p>
+      </div>
+      <div class="paper intro-panel">
+        <div class="intro-panel__top"><span class="mini-step">01 / Знакомство</span><span class="no-clock">◷ Таймер ещё не включён</span></div>
+        <form id="intro-form" novalidate>
+          <div class="intro-fields">
+            ${introQuestions.map((item, index) => `
+              <div class="field-group">
+                <label for="intro-${index}">${index + 1}. ${escapeHtml(item.title)}</label>
+                <div class="field-hint">${escapeHtml(item.hint)}</div>
+                <textarea class="field-control" rows="2" id="intro-${index}" data-intro-index="${index}" maxlength="${item.maxLength}" placeholder="${escapeHtml(item.placeholder)}">${escapeHtml(state.intros[index])}</textarea>
+                <div class="field-meta"><span class="field-warning" id="intro-warning-${index}"></span><span id="intro-counter-${index}">${state.intros[index].length} / ${item.maxLength}</span></div>
+              </div>`).join('')}
+          </div>
+          <div class="intro-panel__bottom">
+            <div class="privacy-note"><span class="note-icon">♡</span><span>Это только твои ответы. В этой демоверсии они остаются в текущей вкладке браузера и никуда не отправляются.</span></div>
+            <button class="button button--purple" type="submit" id="intro-submit">Начать тест · 5 минут <span class="button-arrow">→</span></button>
+          </div>
+        </form>
+      </div>
+    </section>`;
+  document.querySelectorAll('[data-intro-index]').forEach(area => area.addEventListener('input', event => {
+    const index = Number(event.currentTarget.dataset.introIndex);
+    state.intros[index] = event.currentTarget.value;
+    document.querySelector(`#intro-counter-${index}`).textContent = `${state.intros[index].length} / ${introQuestions[index].maxLength}`;
+    document.querySelector(`#intro-warning-${index}`).textContent = '';
+    event.currentTarget.classList.remove('is-invalid');
+    save();
+  }));
+  document.querySelector('#intro-form').addEventListener('submit', event => {
+    event.preventDefault();
+    // Read directly from the controls, including values inserted by autofill.
+    // These answers do not affect avatar scoring; they must not block the test.
+    state.intros = introQuestions.map((item, index) =>
+      document.querySelector(`#intro-${index}`).value.slice(0, item.maxLength));
+    state.startedAt = Date.now();
+    state.deadline = state.startedAt + TEST_SECONDS * 1000;
+    state.position = 0;
+    state.screen = 'quiz';
+    save();
+    render(true);
+  });
+}
+
+function categoryLabel(question) {
+  if (question.type === 'pair') return 'Что тебе ближе';
+  if (question.type === 'scale') return 'Что тебя вдохновляет';
+  if (question.mood === 'green') return 'Зелёные флаги';
+  if (question.mood === 'red') return 'Красные флаги';
+  return 'Твои сильные стороны';
+}
+
+function answerButton(question, option, index, current, type) {
+  const selected = type === 'multi' ? Array.isArray(current) && current.includes(index) : current === index;
+  const marker = type === 'multi' ? (selected ? '✓' : '+') : String(index + 1).padStart(2, '0');
+  return `<button type="button" class="choice ${selected ? 'is-selected' : ''}" data-choice="${index}" role="${type === 'multi' ? 'checkbox' : 'radio'}" aria-checked="${selected}">
+    <span class="choice__marker" aria-hidden="true">${marker}</span>
+    <span class="choice__text">${escapeHtml(option.label)}</span>
+    <span class="choice__tick" aria-hidden="true">✓</span>
+  </button>`;
+}
+
+function answerMarkup(question, answer) {
+  if (question.type === 'scale') {
+    return `<div class="scale-options" role="group" aria-label="Выбери оценку от 1 до 5">
+      ${Array.from({length:5}, (_, index) => `<button type="button" class="scale-button ${answer === index+1 ? 'is-selected' : ''}" data-scale="${index+1}" aria-label="${index+1} из 5" aria-pressed="${answer === index+1}">${index+1}</button>`).join('')}
+    </div><div class="scale-labels"><span>Совсем не интересно</span><span>Очень интересно</span></div>`;
+  }
+  const multi = question.type === 'multi';
+  const choiceClass = multi ? 'choice-list choice-list--multi' : 'choice-list';
+  const buttons = question.options.map((option, index) => answerButton(question, option, index, answer, question.type)).join('');
+  const info = multi ? `<div class="selection-count"><span>Нужно выбрать <strong>${question.required} варианта</strong></span><span>Выбрано: <strong>${(answer || []).length} / ${question.required}</strong></span></div>` : '';
+  return `<div class="${choiceClass}" role="${multi ? 'group' : 'radiogroup'}" aria-label="Варианты ответа">${buttons}</div>${info}`;
+}
+
+function renderQuiz() {
+  const index = state.position;
+  const question = questions[index];
+  const current = state.answers[index];
+  const percent = index / questions.length * 100;
+  root.innerHTML = `
+    <section class="quiz-wrap" aria-labelledby="quiz-title">
+      <div class="quiz-top">
+        <div class="quiz-progress-text">Вопрос <span>${index + 1}</span> из ${questions.length}</div>
+        <div id="timer" class="timer" role="timer" aria-label="Осталось времени">
+          <span class="timer__ring" aria-hidden="true"></span><span class="timer__clock" id="timer-label">05:00</span>
+        </div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Прогресс теста" aria-valuemin="0" aria-valuemax="${questions.length}" aria-valuenow="${index + 1}"><div class="progress-fill" style="width:${percent}%"></div></div>
+      <div class="quiz-card paper">
+        <div class="quiz-card__header">
+          <span class="quiz-category ${question.mood || ''}">${moodEmoji[question.mood] || '✦'} ${categoryLabel(question)}</span>
+          <span class="quiz-dots" aria-hidden="true">•••</span>
+        </div>
+        <h1 id="quiz-title" class="quiz-title">${escapeHtml(question.prompt)}</h1>
+        ${question.type === 'pair' ? '<p class="quiz-hint">Представь обычный рабочий день и выбери то, что ближе именно тебе.</p>' : ''}
+        ${question.type === 'multi' ? '<p class="quiz-hint">Выбирай по ощущениям — здесь нет правильного ответа.</p>' : ''}
+        ${answerMarkup(question, current)}
+      </div>
+      <div id="overtime-holder"></div>
+      <div class="quiz-bottom">
+        <button type="button" class="back-button" id="quiz-back" ${index === 0 ? 'disabled' : ''}>← Назад</button>
+        <div class="quiz-bottom__right">
+          <span class="question-tip">Можно изменить ответ</span>
+          <button type="button" class="button button--purple" id="quiz-next" ${isValidAnswer(question, current) ? '' : 'disabled'}>${index === questions.length - 1 ? 'Узнать свой Вайбо ✳' : 'Далее'} <span class="button-arrow">→</span></button>
+        </div>
+      </div>
+    </section>`;
+
+  document.querySelectorAll('[data-choice]').forEach(button => button.addEventListener('click', () => {
+    const choice = Number(button.dataset.choice);
+    if (question.type === 'multi') {
+      const selected = Array.isArray(state.answers[index]) ? [...state.answers[index]] : [];
+      const existing = selected.indexOf(choice);
+      if (existing >= 0) selected.splice(existing, 1);
+      else if (selected.length < question.required) selected.push(choice);
+      else { showToast(`Можно выбрать только ${question.required} варианта`); return; }
+      state.answers[index] = selected;
+    } else state.answers[index] = choice;
+    save(); renderQuiz();
+  }));
+  document.querySelectorAll('[data-scale]').forEach(button => button.addEventListener('click', () => {
+    state.answers[index] = Number(button.dataset.scale);
+    save(); renderQuiz();
+  }));
+  document.querySelector('#quiz-back').addEventListener('click', () => {
+    if (state.position <= 0) return;
+    state.position--;
+    save(); render(true);
+  });
+  document.querySelector('#quiz-next').addEventListener('click', () => {
+    if (!isValidAnswer(question, state.answers[index])) return;
+    if (index === questions.length - 1) {
+      if (!isComplete(state.answers)) { showToast('Ответь на все задания, чтобы увидеть результат'); return; }
+      state.completedAt = Date.now(); state.screen = 'result';
+      save(); render(true);
+    } else {
+      state.position++;
+      save(); render(true);
+    }
+  });
+  updateTimer();
+}
+
+function updateTimer() {
+  if (state.screen !== 'quiz') return;
+  const remaining = Math.max(0, Math.ceil((state.deadline - Date.now()) / 1000));
+  const mins = String(Math.floor(remaining / 60)).padStart(2, '0');
+  const secs = String(remaining % 60).padStart(2, '0');
+  const label = document.querySelector('#timer-label');
+  const display = document.querySelector('#timer');
+  const note = document.querySelector('#overtime-holder');
+  if (!label || !display || !note) return;
+  label.textContent = `${mins}:${secs}`;
+  display.setAttribute('aria-label', remaining ? `Осталось ${mins} минут ${secs} секунд` : 'Пять минут прошли');
+  display.classList.toggle('is-urgent', remaining <= 60 && remaining > 0);
+  display.classList.toggle('is-done', remaining === 0);
+  display.style.setProperty('--timer-angle', `${Math.round(remaining / TEST_SECONDS * 360)}deg`);
+  if (!remaining && !note.hasChildNodes()) note.innerHTML = `<div class="overtime-note"><span>⏱</span><span>Пять минут прошли — ничего страшного! Можешь спокойно закончить и получить свой Вайбо.</span></div>`;
+}
+
+function resultPersonality() {
+  const profile = calculateProfile(state.answers);
+  const selected = profile.candidates.find(item => item.id === state.chosenPersona);
+  return { profile, persona: selected || profile.primary };
+}
+
+function renderResult() {
+  const { profile, persona } = resultPersonality();
+  const style = styles[persona.style];
+  const motive = motivations[persona.motive];
+  root.innerHTML = `
+    <section class="result" aria-labelledby="result-title">
+      <div class="result-topline"><span class="eyebrow">✳ Твой результат готов</span></div>
+      <h1 class="result-title" id="result-title">Знакомься, это <span class="orange">твой Вайбо!</span></h1>
+      <p class="result-subtitle">${profile.ambiguous ? 'У тебя сочетаются несколько сильных сторон. Мы нашли несколько близких образов — посмотри, какой откликается больше.' : 'Кажется, мы кое-что про тебя поняли. Вот образ, который лучше всего совпал с твоими ответами.'}</p>
+      <div class="result-card">
+        <div class="result-card__art"><div class="avatar-stage">${avatarSvg(persona)}</div><span class="avatar-ribbon">✳ ${escapeHtml(style.name)} · ${escapeHtml(motive.short)}</span></div>
+        <div class="result-card__details">
+          <span class="result-label">ВАЙБО № ${String(Object.keys(personas).indexOf(persona.id)+1).padStart(2,'0')}</span>
+          <h2 class="persona-name">${escapeHtml(persona.name)}</h2>
+          <p class="persona-desc">${escapeHtml(style.tagline)}</p>
+          <div class="detail-label">ТВОИ ВОЗМОЖНЫЕ СУПЕРСИЛЫ</div>
+          <div class="strength-list">${persona.strengths.map(strength => `<span class="strength">${escapeHtml(strength)}</span>`).join('')}</div>
+          <div class="result-divider"></div>
+          <div class="detail-label">ЧТО ТЕБЯ ЗАРЯЖАЕТ</div>
+          <div class="energy-text"><span class="energy-icon">⚡</span><span>${escapeHtml(persona.energy)}. ${escapeHtml(motive.caption)}</span></div>
+        </div>
+      </div>
+      ${profile.ambiguous ? `
+        <div class="result-options"><h3>Тебе близки сразу несколько Вайбо</h3><p>Результаты получились очень похожими. Выбери образ для своей карточки — твои ответы и расчёт при этом не меняются.</p>
+        <div class="candidate-grid">
+        ${profile.candidates.map(candidate => `<button type="button" class="candidate ${persona.id === candidate.id ? 'is-selected' : ''}" data-persona="${candidate.id}" aria-pressed="${persona.id === candidate.id}">${avatarSvg(candidate)}<span><strong>${escapeHtml(candidate.name)}</strong><small>${escapeHtml(styles[candidate.style].name)} · ${escapeHtml(motivations[candidate.motive].short)}</small></span></button>`).join('')}
+        </div></div>` : ''}
+      <div class="next-step">
+        <div class="next-step__copy"><h3>Это ещё не всё. Заглянем глубже?</h3><p>Дальше — большое тестирование с подробным профилем и личным планом карьерного роста. Скоро в VibeHunt.</p></div>
+        <button type="button" class="button" id="see-next">Что будет дальше <span class="button-arrow">↗</span></button>
+      </div>
+      <div class="feedback-bar"><span>Насколько тебе откликается Вайбо?</span>
+        ${[['yes','Это я! 🔥'],['part','Частично 🙂'],['no','Не совсем 🤔']].map(([key,label]) => `<button class="feedback-btn ${state.feedback === key ? 'is-selected' : ''}" data-feedback="${key}" aria-pressed="${state.feedback === key}">${label}</button>`).join('')}
+      </div>
+      <div class="result-actions"><button class="button button--outline button--small" type="button" id="share-result">↗ Поделиться результатом</button><button class="button-subtle" type="button" id="restart">Пройти заново</button></div>
+      <p class="result-footnote">Вайбо — игровой образ твоих рабочих предпочтений. Он помогает узнать себя, но не оценивает твои способности или профессиональную пригодность.</p>
+    </section>`;
+
+  document.querySelectorAll('[data-persona]').forEach(button => button.addEventListener('click', () => {
+    state.chosenPersona = button.dataset.persona; save(); renderResult();
+  }));
+  document.querySelectorAll('[data-feedback]').forEach(button => button.addEventListener('click', () => {
+    state.feedback = button.dataset.feedback; save(); renderResult();
+    showToast('Спасибо! Твой отклик сохранён в этой вкладке');
+  }));
+  document.querySelector('#see-next').addEventListener('click', () => nextDialog.showModal());
+  document.querySelector('#share-result').addEventListener('click', async () => {
+    const message = `Мой Вайбо — ${persona.name} ✳\nМои суперсилы: ${persona.strengths.join(' и ')}.\nЧто заряжает: ${persona.energy}.\nУзнай свой рабочий вайб в VibeHunt!`;
+    try {
+      if (navigator.share) await navigator.share({ title: 'Мой Вайбо', text: message });
+      else if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(message); showToast('Текст результата скопирован!'); }
+      else { fallbackCopy(message); showToast('Текст результата скопирован!'); }
+    } catch (error) { if (error.name !== 'AbortError') showToast('Не получилось поделиться. Попробуй ещё раз.'); }
+  });
+  document.querySelector('#restart').addEventListener('click', () => {
+    if (!window.confirm('Начать с нуля? Все ответы из текущего прохождения будут удалены.')) return;
+    state = initialState(); save(); render(true);
+  });
+}
+
+function fallbackCopy(message) {
+  const area = document.createElement('textarea');
+  area.value = message; area.style.position = 'fixed'; area.style.opacity = '0';
+  document.body.appendChild(area); area.select();
+  try { document.execCommand('copy'); } finally { area.remove(); }
+}
+
+function render(scrollToTop = false) {
+  if (state.screen === 'welcome') renderWelcome();
+  if (state.screen === 'intro') renderIntro();
+  if (state.screen === 'quiz') renderQuiz();
+  if (state.screen === 'result') renderResult();
+  if (scrollToTop) { window.scrollTo({ top: 0, behavior: 'instant' }); root.focus({ preventScroll: true }); }
+}
+
+document.querySelector('#help-button').addEventListener('click', () => infoDialog.showModal());
+document.querySelectorAll('[data-close-dialog]').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
+document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('click', event => {
+  if (event.target === dialog) dialog.close();
+}));
+
+window.setInterval(updateTimer, 500);
+render();
+
+</script>
+</body>
+</html>
