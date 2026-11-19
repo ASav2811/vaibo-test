@@ -191,6 +191,8 @@ h1, h2, h3, p { margin-top: 0; }
 .candidate-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 10px; }
 .candidate { text-align: left; border: 1.5px solid #e9e8f1; background: #fdfdff; padding: 12px; border-radius: 14px; display: flex; align-items: center; gap: 10px; transition: .2s; }
 .candidate:hover { border-color: #c9bcff; }
+.candidate--informational { cursor: default; }
+.candidate--informational:hover { border-color: #e9e8f1; }
 .candidate.is-selected { border-color: #8b75ea; background: #f4f0ff; }
 .candidate svg { width: 42px; height: 42px; flex: none; }
 .candidate strong { display: block; font-size: 12px; }

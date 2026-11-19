@@ -201,6 +201,8 @@ h1, h2, h3, p { margin-top: 0; }
 .candidate-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 10px; }
 .candidate { text-align: left; border: 1.5px solid #e9e8f1; background: #fdfdff; padding: 12px; border-radius: 14px; display: flex; align-items: center; gap: 10px; transition: .2s; }
 .candidate:hover { border-color: #c9bcff; }
+.candidate--informational { cursor: default; }
+.candidate--informational:hover { border-color: #e9e8f1; }
 .candidate.is-selected { border-color: #8b75ea; background: #f4f0ff; }
 .candidate svg { width: 42px; height: 42px; flex: none; }
 .candidate strong { display: block; font-size: 12px; }
@@ -356,7 +358,7 @@ h1, h2, h3, p { margin-top: 0; }
 
     <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
   <script>
-// VibeHunt 5.0 — тексты и ключи отдельно от интерфейса.
+// VibeHunt 5.2 — тексты и ключи отдельно от интерфейса.
 // Коды используются только в расчёте и никогда не показываются участнику.
 
 const introQuestions = [
@@ -439,16 +441,16 @@ const questions = [
     option('Умение договариваться', 'C'),
   ], { required: 2 }),
   question('multi', 'Какие два утверждения больше про тебя?', [
-    option('Быстро перехожу от слов к делу.', 'D'),
-    option('Помогаю коллегам найти общий язык.', 'C'),
+    option('Разработка идей является моим естественным достоинством', 'K'),
     option('Люблю проверять идеи на практике.', 'N'),
-    option('Часто придумываю новые способы решения.', 'K'),
-    option('Умею раскладывать задачи по шагам.', 'S'),
+    option('Я могу следовать к намеченной цели, несмотря ни на какое давление.', 'D'),
+    option('На меня можно положиться при организации важной работы.', 'S'),
+    option('Я могу успешно работать с разными типами людей.', 'C'),
   ], { required: 2 }),
   question('multi', 'Чем ты чаще всего помогаешь команде? Выбери два.', [
-    option('Делаю запутанное понятным.', 'S'),
+    option('Разбиваю сложную задачу на части и распределяю работу.', 'S'),
     option('Предлагаю неожиданные идеи.', 'K'),
-    option('Помогаю коллегам работать сообща.', 'C'),
+    option('Замечаю сильные стороны коллег и помогаю их использовать.', 'C'),
     option('Довожу важные задачи до результата.', 'D'),
     option('Нахожу улучшения через пробы.', 'N'),
   ], { required: 2 }),
@@ -475,7 +477,7 @@ const questions = [
   ], { mood: 'green' }),
   question('single', 'Что в работе раздражает сильнее всего?', [
     option('Отсутствие обратной связи', 'M'),
-    option('Игнорирование идей и заслуг', 'B'),
+    option('Невыполнение обязательств', 'B'),
     option('Авторитарное управление', 'A'),
   ], { mood: 'red' }),
   question('single', 'Какая команда тебе ближе?', [
@@ -603,6 +605,15 @@ function calculateProfile(answers) {
   const candidates = matchedStyles.flatMap(style =>
     matchedMotives.map(motive => personas[`${style}|${motive}`]));
 
+  // Показываем две ближайшие альтернативы даже при однозначном лидере.
+  // Обе шкалы нормированы от 0 до 1; сумма сохраняет сопоставимость вклада осей.
+  const alternatives = Object.values(personas)
+    .filter(persona => persona.id !== `${styleRanking[0].key}|${motiveRanking[0].key}`)
+    .sort((a, b) =>
+      (styleScores[b.style] + motiveScores[b.motive]) -
+      (styleScores[a.style] + motiveScores[a.motive]) || a.id.localeCompare(b.id))
+    .slice(0, 2);
+
   return {
     styleScores, motiveScores, pairCounts, qualityCounts, greenCounts, redCounts,
     styleRanking, motiveRanking, styleGap, motiveGap,
@@ -610,7 +621,7 @@ function calculateProfile(answers) {
     primaryMotive: motiveRanking[0].key,
     primary: personas[`${styleRanking[0].key}|${motiveRanking[0].key}`],
     ambiguous: styleGap < STYLE_NEAR_THRESHOLD || motiveGap < MOTIVE_NEAR_THRESHOLD,
-    candidates,
+    candidates, alternatives,
   };
 }
 
@@ -618,7 +629,7 @@ function calculateProfile(answers) {
 
 
 // Новый ключ не подхватывает ответы от версии с другими заданиями.
-const STORE_KEY = 'vibehunt-mvp-5.1-fundamental-session';
+const STORE_KEY = 'vibehunt-mvp-5.2-refined-session';
 const root = document.querySelector('#app');
 const infoDialog = document.querySelector('#info-dialog');
 const nextDialog = document.querySelector('#next-dialog');
@@ -968,10 +979,15 @@ function renderResult() {
         </div>
       </div>
       ${profile.ambiguous ? `
-        <div class="result-options"><h3>Тебе близки сразу несколько Вайбо</h3><p>Результаты получились очень похожими. Выбери образ для своей карточки — твои ответы и расчёт при этом не меняются.</p>
+        <div class="result-options"><h3>Альтернативные вайбо-аватары</h3><p>Результаты получились очень похожими. Выбери образ для своей карточки — твои ответы и расчёт при этом не меняются.</p>
         <div class="candidate-grid">
         ${profile.candidates.map(candidate => `<button type="button" class="candidate ${persona.id === candidate.id ? 'is-selected' : ''}" data-persona="${candidate.id}" aria-pressed="${persona.id === candidate.id}">${avatarSvg(candidate)}<span><strong>${escapeHtml(candidate.name)}</strong><small>${escapeHtml(styles[candidate.style].name)} · ${escapeHtml(motivations[candidate.motive].short)}</small></span></button>`).join('')}
-        </div></div>` : ''}
+        </div></div>` : `
+        <div class="result-options"><h3>Альтернативные вайбо-аватары</h3><p>Ещё два сочетания, которые набрали следующие по величине баллы. Основной Вайбо соответствует ответам лучше.</p>
+          <div class="candidate-grid">
+            ${profile.alternatives.map(candidate => `<div class="candidate candidate--informational">${avatarSvg(candidate)}<span><strong>${escapeHtml(candidate.name)}</strong><small>${escapeHtml(styles[candidate.style].name)} · ${escapeHtml(motivations[candidate.motive].short)}</small></span></div>`).join('')}
+          </div>
+        </div>`}
       <div class="next-step">
         <div class="next-step__copy"><h3>Это ещё не всё. Заглянем глубже?</h3><p>Дальше — большое тестирование с подробным профилем и личным планом карьерного роста. Скоро в VibeHunt.</p></div>
         <button type="button" class="button" id="see-next">Что будет дальше <span class="button-arrow">↗</span></button>

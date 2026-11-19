@@ -2,7 +2,7 @@ import { introQuestions, motivations, personas, questions, styles, TEST_SECONDS 
 import { calculateProfile, isComplete, isValidAnswer } from './scoring.mjs';
 
 // Новый ключ не подхватывает ответы от версии с другими заданиями.
-const STORE_KEY = 'vibehunt-mvp-5.1-fundamental-session';
+const STORE_KEY = 'vibehunt-mvp-5.2-refined-session';
 const root = document.querySelector('#app');
 const infoDialog = document.querySelector('#info-dialog');
 const nextDialog = document.querySelector('#next-dialog');
@@ -352,10 +352,15 @@ function renderResult() {
         </div>
       </div>
       ${profile.ambiguous ? `
-        <div class="result-options"><h3>Тебе близки сразу несколько Вайбо</h3><p>Результаты получились очень похожими. Выбери образ для своей карточки — твои ответы и расчёт при этом не меняются.</p>
+        <div class="result-options"><h3>Альтернативные вайбо-аватары</h3><p>Результаты получились очень похожими. Выбери образ для своей карточки — твои ответы и расчёт при этом не меняются.</p>
         <div class="candidate-grid">
         ${profile.candidates.map(candidate => `<button type="button" class="candidate ${persona.id === candidate.id ? 'is-selected' : ''}" data-persona="${candidate.id}" aria-pressed="${persona.id === candidate.id}">${avatarSvg(candidate)}<span><strong>${escapeHtml(candidate.name)}</strong><small>${escapeHtml(styles[candidate.style].name)} · ${escapeHtml(motivations[candidate.motive].short)}</small></span></button>`).join('')}
-        </div></div>` : ''}
+        </div></div>` : `
+        <div class="result-options"><h3>Альтернативные вайбо-аватары</h3><p>Ещё два сочетания, которые набрали следующие по величине баллы. Основной Вайбо соответствует ответам лучше.</p>
+          <div class="candidate-grid">
+            ${profile.alternatives.map(candidate => `<div class="candidate candidate--informational">${avatarSvg(candidate)}<span><strong>${escapeHtml(candidate.name)}</strong><small>${escapeHtml(styles[candidate.style].name)} · ${escapeHtml(motivations[candidate.motive].short)}</small></span></div>`).join('')}
+          </div>
+        </div>`}
       <div class="next-step">
         <div class="next-step__copy"><h3>Это ещё не всё. Заглянем глубже?</h3><p>Дальше — большое тестирование с подробным профилем и личным планом карьерного роста. Скоро в VibeHunt.</p></div>
         <button type="button" class="button" id="see-next">Что будет дальше <span class="button-arrow">↗</span></button>

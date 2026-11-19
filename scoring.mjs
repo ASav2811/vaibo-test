@@ -77,6 +77,15 @@ export function calculateProfile(answers) {
   const candidates = matchedStyles.flatMap(style =>
     matchedMotives.map(motive => personas[`${style}|${motive}`]));
 
+  // Показываем две ближайшие альтернативы даже при однозначном лидере.
+  // Обе шкалы нормированы от 0 до 1; сумма сохраняет сопоставимость вклада осей.
+  const alternatives = Object.values(personas)
+    .filter(persona => persona.id !== `${styleRanking[0].key}|${motiveRanking[0].key}`)
+    .sort((a, b) =>
+      (styleScores[b.style] + motiveScores[b.motive]) -
+      (styleScores[a.style] + motiveScores[a.motive]) || a.id.localeCompare(b.id))
+    .slice(0, 2);
+
   return {
     styleScores, motiveScores, pairCounts, qualityCounts, greenCounts, redCounts,
     styleRanking, motiveRanking, styleGap, motiveGap,
@@ -84,6 +93,6 @@ export function calculateProfile(answers) {
     primaryMotive: motiveRanking[0].key,
     primary: personas[`${styleRanking[0].key}|${motiveRanking[0].key}`],
     ambiguous: styleGap < STYLE_NEAR_THRESHOLD || motiveGap < MOTIVE_NEAR_THRESHOLD,
-    candidates,
+    candidates, alternatives,
   };
 }
