@@ -1,7 +1,8 @@
 import { introQuestions, motivations, personas, questions, styles, TEST_SECONDS } from './content.mjs';
 import { calculateProfile, isComplete, isValidAnswer } from './scoring.mjs';
 
-const STORE_KEY = 'vibehunt-mvp-5.0-session';
+// Новый ключ не подхватывает ответы от версии с другими заданиями.
+const STORE_KEY = 'vibehunt-mvp-5.1-fundamental-session';
 const root = document.querySelector('#app');
 const infoDialog = document.querySelector('#info-dialog');
 const nextDialog = document.querySelector('#next-dialog');
